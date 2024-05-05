@@ -1,5 +1,8 @@
 # binance-rs-async
 
+**fork from https://github.com/lijiachang/binance-rs-async-ext.git**
+**but add more subject: margin and coin-m future**
+
 Unofficial Rust Library for the [Binance API](https://github.com/binance-exchange/binance-official-api-docs)
 
 This is a fully async api using [tokio](https://tokio.rs/).

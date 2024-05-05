@@ -295,7 +295,7 @@ pub struct MarkPriceEvent {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CombinedStreamEvent<T> {
-    stream: String,
+    pub stream: String,
     pub data: T,
 }
 

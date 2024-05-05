@@ -30,14 +30,14 @@ async fn main() {
     //user_stream_websocket().await;
     // public api
     let streams: Vec<BoxFuture<'static, ()>> = vec![
-        Box::pin(market_websocket(logger_tx.clone())),
-        Box::pin(kline_websocket(logger_tx.clone())),
-        Box::pin(all_trades_websocket(logger_tx.clone())),
-        Box::pin(last_price(logger_tx.clone())),
-        Box::pin(book_ticker(logger_tx.clone())),
+        // Box::pin(market_websocket(logger_tx.clone())),
+        // Box::pin(kline_websocket(logger_tx.clone())),
+        // Box::pin(all_trades_websocket(logger_tx.clone())),
+        // Box::pin(last_price(logger_tx.clone())),
+        // Box::pin(book_ticker(logger_tx.clone())),
         Box::pin(combined_orderbook(logger_tx.clone())),
-        Box::pin(custom_event_loop(logger_tx.clone())),
-        Box::pin(mark_price_websocket(logger_tx)),
+        // Box::pin(custom_event_loop(logger_tx.clone())),
+        // Box::pin(mark_price_websocket(logger_tx)),
     ];
 
     for stream in streams {

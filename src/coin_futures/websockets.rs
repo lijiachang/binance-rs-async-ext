@@ -22,7 +22,6 @@ pub static AGGREGATED_TRADE: &str = "aggTrade";
 pub static DEPTH_ORDERBOOK: &str = "depthUpdate";
 pub static PARTIAL_ORDERBOOK: &str = "lastUpdateId";
 pub static DAYTICKER: &str = "24hrTicker";
-pub static MARK_PRICE: &str = "markPrice";
 
 pub fn all_ticker_stream() -> &'static str { "!ticker@arr" }
 
@@ -43,16 +42,10 @@ pub fn all_mini_ticker_stream() -> &'static str { "!miniTicker@arr" }
 pub fn mini_ticker_stream(symbol: &str) -> String { format!("{symbol}@miniTicker") }
 
 /// # Arguments
-/// 
-/// * `symbol`: the market symbol
-/// * `update_speed`: 1 or 3
-pub fn mark_price_stream(symbol: &str, update_speed: u8) -> String { format!("{symbol}@markPrice@{update_speed}s") }
-
-/// # Arguments
 ///
 /// * `symbol`: the market symbol
 /// * `levels`: 5, 10 or 20
-/// * `update_speed`: 1000 or 100
+/// * `update_speed`: 250 or 500 or 100
 pub fn partial_book_depth_stream(symbol: &str, levels: u16, update_speed: u16) -> String {
     format!("{symbol}@depth{levels}@{update_speed}ms")
 }
@@ -99,7 +92,7 @@ impl<'a, WE: serde::de::DeserializeOwned> WebSockets<'a, WE> {
     /// Connect to multiple websocket endpoints
     /// N.B: WE has to be CombinedStreamEvent
     pub async fn connect_multiple(&mut self, endpoints: Vec<String>) -> Result<()> {
-        let mut url = Url::parse(&self.conf.ws_endpoint)?;
+        let mut url = Url::parse(&self.conf.coin_futures_ws_endpoint)?;
         url.path_segments_mut()
             .map_err(|_| Error::UrlParserError(url::ParseError::RelativeUrlWithoutBase))?
             .push(STREAM_ENDPOINT);
@@ -110,14 +103,6 @@ impl<'a, WE: serde::de::DeserializeOwned> WebSockets<'a, WE> {
 
     /// Connect to a websocket endpoint
     pub async fn connect(&mut self, endpoint: &str) -> Result<()> {
-        let wss: String = format!("{}/{}/{}", self.conf.ws_endpoint, WS_ENDPOINT, endpoint);
-        let url = Url::parse(&wss)?;
-
-        self.handle_connect(url).await
-    }
-
-    /// Connect to a futures websocket endpoint
-    pub async fn connect_futures(&mut self, endpoint: &str) -> Result<()> {
         let wss: String = format!("{}/{}/{}", self.conf.futures_ws_endpoint, WS_ENDPOINT, endpoint);
         let url = Url::parse(&wss)?;
 
@@ -125,7 +110,6 @@ impl<'a, WE: serde::de::DeserializeOwned> WebSockets<'a, WE> {
     }
 
     async fn handle_connect(&mut self, url: Url) -> Result<()> {
-        println!("Connecting to {:?}", &url.as_str());
         match connect_async(url).await {
             Ok(answer) => {
                 self.socket = Some(answer);

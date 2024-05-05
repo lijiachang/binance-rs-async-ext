@@ -8,6 +8,9 @@ pub struct Config {
     pub futures_rest_api_endpoint: String,
     pub futures_ws_endpoint: String,
 
+    pub coin_futures_rest_api_endpoint: String,
+    pub coin_futures_ws_endpoint: String,
+
     pub recv_window: u64,
 
     pub binance_us_api: bool,
@@ -166,6 +169,9 @@ impl Default for Config {
 
             futures_rest_api_endpoint: "https://fapi.binance.com".into(),
             futures_ws_endpoint: "wss://fstream.binance.com".into(),
+
+            coin_futures_rest_api_endpoint: "https://dapi.binance.com".into(),
+            coin_futures_ws_endpoint: "wss://dstream.binance.com".into(),
 
             recv_window: 5000,
             binance_us_api: false,

@@ -18,16 +18,6 @@ pub struct ExchangeInformation {
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
-pub struct CoinFutureExchangeInformation {
-    pub timezone: String,
-    pub server_time: u64,
-    pub rate_limits: Vec<RateLimit>,
-    pub exchange_filters: Vec<Filters>,
-    pub symbols: Vec<CoinFutureSymbol>,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone)]
-#[serde(rename_all = "camelCase")]
 pub struct AssetDetail {
     pub asset: String,
     pub margin_available: bool,
@@ -64,33 +54,6 @@ pub struct Symbol {
     pub time_in_force: Vec<TimeInForce>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
-#[serde(rename_all = "camelCase")]
-pub struct CoinFutureSymbol {
-    pub symbol: String,
-    pub pair: String,
-    pub contract_type: CoinFutureContractType,
-    pub delivery_date: u64,
-    pub onboard_date: u64,
-    #[serde(with = "string_or_float")]
-    pub maint_margin_percent: f64,
-    #[serde(with = "string_or_float")]
-    pub required_margin_percent: f64,
-    pub base_asset: String,
-    pub quote_asset: String,
-    pub price_precision: u16,
-    pub quantity_precision: u16,
-    pub base_asset_precision: u64,
-    pub quote_precision: u64,
-    pub underlying_type: String,
-    pub underlying_sub_type: Vec<String>,
-    #[serde(with = "string_or_float")]
-    pub trigger_protect: f64,
-    pub filters: Vec<Filters>,
-    pub order_types: Vec<OrderType>,
-    pub time_in_force: Vec<TimeInForce>,
-}
-
 #[derive(Debug, Deserialize, Serialize, Clone)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum ContractType {
@@ -101,22 +64,6 @@ pub enum ContractType {
     NextQuarter,
     #[serde(rename = "CURRENT_QUARTER DELIVERING")]
     CurrentQuarterDelivery,
-    PerpetualDelivering,
-    #[serde(rename = "")]
-    Empty,
-}
-
-#[derive(Debug, Deserialize, Serialize, Clone, PartialEq)]
-#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
-pub enum CoinFutureContractType {
-    Perpetual,
-    CurrentMonth,
-    NextMonth,
-    CurrentQuarter,
-    NextQuarter,
-    #[serde(rename = "CURRENT_QUARTER DELIVERING")]
-    CurrentQuarterDelivery,
-    #[serde(rename = "PERPETUAL DELIVERING")]
     PerpetualDelivering,
     #[serde(rename = "")]
     Empty,
@@ -631,9 +578,7 @@ pub struct ChangeLeverageResponse {
 }
 
 fn default_stop_price() -> f64 { 0.0 }
-
 fn default_activation_price() -> f64 { 0.0 }
-
 fn default_price_rate() -> f64 { 0.0 }
 
 #[derive(Serialize)]
